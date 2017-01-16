@@ -3,7 +3,7 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-require 'helpers.php';
+require 'Helpers.php';
 
 /**
  * This is the weather module main class
@@ -29,7 +29,7 @@ class Weather extends Module
 
 	    parent::__construct();
 
-	    $this->displayName = $this->l('Weather');
+	    $this->displayName = $this->l('weather');
     	$this->description = $this->l('Shows the weather at the zip code.');
     	$this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 

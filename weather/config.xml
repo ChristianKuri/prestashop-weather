@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>Weather</name>
-	<displayName><![CDATA[Weather]]></displayName>
+	<name>weather</name>
+	<displayName><![CDATA[weather]]></displayName>
 	<version><![CDATA[1.0.0]]></version>
 	<description><![CDATA[Shows the weather at the zip code.]]></description>
 	<author><![CDATA[Christian Kuri]]></author>
