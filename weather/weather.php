@@ -19,7 +19,7 @@ class Weather extends Module
 	 */
 	function __construct()
 	{
-		$this->name = 'Weather';
+		$this->name = 'weather';
 	    $this->tab = 'front_office_features';
 	    $this->version = '1.0.0';
 	    $this->author = 'Christian Kuri';
