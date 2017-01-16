@@ -56,7 +56,7 @@ Here is where you have to introduce the time you would like the application to h
 ## Contributions
 
 Contributions are **welcome** and will be fully **credited**.
-We accept contributions via Pull Requests on [Github](https://github.com/ChristianKuri/laravel-favorite).
+We accept contributions via Pull Requests on [Github](https://github.com/ChristianKuri/prestashop-weather).
 
 ### Pull Requests
 
