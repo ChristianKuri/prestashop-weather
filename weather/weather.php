@@ -79,14 +79,15 @@ class Weather extends Module
 	        $weather['api'] = strval(Tools::getValue('api'));
 	        $weather['zip'] = strval(Tools::getValue('zip'));
 	        $weather['cache'] = strval(Tools::getValue('cache'));
-	        if (empty($weather['api']) || empty($weather['zip']))
+	        if (empty($weather['api']) || empty($weather['zip'])){
 	            $output .= $this->displayError($this->l('Invalid Configuration value'));
-	        if (!Validate::isZipCodeFormat($weather['zip']))
+	        } elseif (!Validate::isZipCodeFormat($weather['zip'])){
 	        	$output .= $this->displayError($this->l('The zip code is invalid'));
-	        if (!is_numeric($weather['cache']))
+	        } elseif (!$this->validateZip($weather['zip'])->country == "United States") {
+	        	$output .= $this->displayError($this->l('The zip code ' . $weather['zip'] . ' does not exist in the United States'));
+	        } elseif (!is_numeric($weather['cache'])){
 	        	$output .= $this->displayError($this->l('The cache value should be a number in munuts'));
-	        else
-	        {
+	        } else {
 	            Configuration::updateValue('WEATHER', serialize($weather));
 	            $output .= $this->displayConfirmation($this->l('Settings updated'));
 	        }
@@ -213,12 +214,17 @@ class Weather extends Module
 	 * First stores the url in the $url variable, then crates a
 	 * curl resource with it, then returns the transfer as a string
 	 * which accepts json and stores it in $response, then closes the curl.
-	 * 
+	 *
+	 * @param  $zip and $api (not required)
 	 * @return object $response
 	 */
-    protected function callApi()
+    protected function callApi($zip = null, $api = null)
     {
-        $url = 'http://api.openweathermap.org/data/2.5/weather?zip=' . $this->getValue('zip') . ',us&appid=' . $this->getValue('api') . '&units=imperial';
+    	if ($zip && is_int($zip) && $api) {
+    		$url = 'http://api.openweathermap.org/data/2.5/weather?zip=' . $zip . ',us&appid=' . $api . '&units=imperial';
+    	} else {
+    		$url = 'http://api.openweathermap.org/data/2.5/weather?zip=' . $this->getValue('zip') . ',us&appid=' . $this->getValue('api') . '&units=imperial';
+    	}
 
         $curl = curl_init($url);
 
@@ -231,6 +237,31 @@ class Weather extends Module
 
 		return json_decode($response);
     }
+
+    /**
+     * This method makes the call to the zippopotam api.
+     * Checks if the given zip code exists in the USA
+     * 
+     * @param int $zip
+     * @return object $response
+     */
+    protected function validateZip($zip)
+    {
+    	$url = 'http://api.zippopotam.us/us/' . $zip;
+
+        $curl = curl_init($url);
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER , array('Accept: application/json'));
+
+		$response = curl_exec($curl);
+
+		curl_close($curl);
+
+		return json_decode($response);
+    }
+
+
 
     /**
      * This method is called in the hookDisplayFooter method.
